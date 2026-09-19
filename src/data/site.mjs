@@ -66,6 +66,18 @@ const raw = {
   level: b('LEVEL', 'الطابق'),
   free: b('FREE', 'متاح'),
   full: b('FULL', 'ممتلئ'),
+  /* film */
+  filmEyebrow: b('Film', 'فيلم'),
+  filmTitle: b('See the arrival in motion.', 'شاهد الوصول في حركته.'),
+  filmSub: b('Nineteen seconds: the garage floor, the Citadel after dark, the valet door and a night-time car park from above.', 'تسع عشرة ثانية: أرضية الموقف، والقلعة بعد حلول الليل، وباب الفاليه، وموقف سيارات ليلي من الأعلى.'),
+  filmAria: b('City Parking brand film, 19 seconds', 'فيلم سيتي باركينج التعريفي، 19 ثانية'),
+  filmChapters: b('Chapters', 'فصول الفيلم'),
+  filmPlay: b('Play film', 'تشغيل الفيلم'),
+  filmToggle: b('Play or pause', 'تشغيل أو إيقاف'),
+  filmMute: b('Sound on or off', 'تشغيل الصوت أو كتمه'),
+  filmFull: b('Full screen', 'ملء الشاشة'),
+  filmSeek: b('Seek', 'تقديم وتأخير'),
+  filmOpen: b('Open related page', 'افتح الصفحة المرتبطة'),
   /* sections */
   pioEyebrow: b('How we work', 'كيف نعمل'),
   pioTitle: b('One accountable partner — from the first drawing to the last car of the night.', 'شريك واحد مسؤول — من أول مخطط حتى آخر سيارة في الليل.'),
@@ -399,4 +411,18 @@ export const careers = {
   prev: b('Previous', 'السابق'),
   submit: b('Submit application', 'إرسال الطلب'),
   thanks: b('Application ready.', 'الطلب جاهز.'),
+};
+
+/* ------------------------------------------------------------------ film (the reel from the old homepage) */
+export const film = {
+  src: 'assets/video/film.mp4',
+  poster: 'assets/video/film-poster.webp',
+  duration: 19,
+  chapters: [
+    { t: 0, time: '0:00', name: b('Opening', 'البداية'), desc: b('The world at night', 'العالم ليلًا') },
+    { t: 3, time: '0:03', name: b('Innovation', 'الابتكار'), desc: b('The garage floor', 'أرضية الموقف'), to: 'solutions/smart-parking-management/' },
+    { t: 6, time: '0:06', name: b('On site', 'في الموقع'), desc: b('Salah Eldeen Citadel, after dark', 'قلعة صلاح الدين بعد حلول الليل'), to: 'case-studies/salah-eldeen-citadel/' },
+    { t: 9, time: '0:09', name: b('Quality', 'الجودة'), desc: b('The valet door', 'باب الفاليه'), to: 'services/valet-services/' },
+    { t: 12, time: '0:12', name: b('After dark', 'بعد حلول الليل'), desc: b('A car park, seen from above', 'موقف سيارات من الأعلى'), to: 'services/parking-management/' },
+  ],
 };

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const PORT = process.env.PORT || process.argv[2] || 4820;
 const ROOT = __dirname;
-const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.json': 'application/json', '.ico': 'image/x-icon', '.txt': 'text/plain', '.xml': 'application/xml' };
+const TYPES = { '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.svg': 'image/svg+xml', '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.json': 'application/json', '.ico': 'image/x-icon', '.txt': 'text/plain', '.xml': 'application/xml', '.mp4': 'video/mp4' };
 http
   .createServer((req, res) => {
     let p = decodeURIComponent(req.url.split('?')[0]);
@@ -20,7 +20,15 @@ http
           res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
           return fs.createReadStream(path.join(ROOT, '404.html')).on('error', () => res.end('not found')).pipe(res);
         }
-        res.writeHead(200, { 'Content-Type': TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream', 'Content-Length': st2.size, 'Cache-Control': 'no-cache' });
+        const type = TYPES[path.extname(file).toLowerCase()] || 'application/octet-stream';
+        const range = req.headers.range;
+        if (range && /^bytes=/.test(range)) {
+          const [a, b] = range.replace('bytes=', '').split('-');
+          const start = parseInt(a, 10) || 0, end = b ? parseInt(b, 10) : st2.size - 1;
+          res.writeHead(206, { 'Content-Range': 'bytes ' + start + '-' + end + '/' + st2.size, 'Accept-Ranges': 'bytes', 'Content-Length': end - start + 1, 'Content-Type': type });
+          return fs.createReadStream(file, { start, end }).pipe(res);
+        }
+        res.writeHead(200, { 'Content-Type': type, 'Content-Length': st2.size, 'Accept-Ranges': 'bytes', 'Cache-Control': 'no-cache' });
         fs.createReadStream(file).pipe(res);
       });
     });

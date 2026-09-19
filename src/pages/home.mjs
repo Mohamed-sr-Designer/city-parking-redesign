@@ -1,6 +1,7 @@
 import { b, t, esc, u, img, plain } from '../lib/i18n.mjs';
-import { SITE, ui, marquee, marqueeAr, heroStats, numbers, pio, lenses, journey, voices, pins } from '../data/site.mjs';
+import { SITE, ui, marquee, marqueeAr, heroStats, numbers, pio, lenses, journey, voices, pins, film } from '../data/site.mjs';
 import { shell, ico, arrow, pbadge, btn, led, stat, ctaBand } from '../lib/layout.mjs';
+import { attr } from '../lib/i18n.mjs';
 import { shead, caseCard, indCard, insCard, faqList, stackChips, solBy, svcBy } from '../lib/components.mjs';
 import { cases, caseBySlug, kinds } from '../data/cases.mjs';
 import { industries } from '../data/industries.mjs';
@@ -47,6 +48,31 @@ function hero() {
   </div>
 </section>
 <div class="marq" aria-label="${esc(plain(ui.cases))}" data-aria-label-ar="${esc(ui.cases.ar)}">${track(marquee, 'en')}${track(marqueeAr, 'ar')}</div>`;
+}
+
+function filmSection() {
+  const chapters = film.chapters
+    .map(
+      (c, i) => `<li><button type="button" class="film-ch${i === 0 ? ' is-on' : ''}" data-film-seek="${c.t}"><time dir="ltr">${c.time}</time><span class="film-ch-tx"><b>${t(c.name)}</b><small>${t(c.desc)}</small></span></button>${c.to ? `<a class="film-ch-go" href="${u(c.to)}" ${attr('aria-label', ui.filmOpen)}>${arrow()}</a>` : ''}</li>`
+    )
+    .join('');
+  return `<section class="sec sec--paper film" id="film">
+  <div class="wrap film-in">
+    <header class="shead film-copy">${pbadge(ui.filmEyebrow)}<h2 class="h2">${t(ui.filmTitle)}</h2><p class="lead">${t(ui.filmSub)}</p></header>
+    <div class="film-player" data-film>
+      <video class="film-video" muted loop playsinline preload="none" disablepictureinpicture poster="${u(film.poster)}" ${attr('aria-label', ui.filmAria)}><source src="${u(film.src)}" type="video/mp4"></video>
+      <button class="film-play" type="button" data-film-play ${attr('aria-label', ui.filmPlay)}>${ico('play')}</button>
+      <div class="film-bar">
+        <button class="film-btn" type="button" data-film-toggle ${attr('aria-label', ui.filmToggle)}>${ico('play', 'i-play')}${ico('pause', 'i-pause')}</button>
+        <div class="film-progress" data-film-progress role="slider" tabindex="0" aria-valuemin="0" aria-valuemax="${film.duration}" aria-valuenow="0" ${attr('aria-label', ui.filmSeek)}><i></i></div>
+        <span class="film-time" dir="ltr">0:00 / 0:${film.duration}</span>
+        <button class="film-btn" type="button" data-film-mute ${attr('aria-label', ui.filmMute)}>${ico('mute', 'i-mute')}${ico('vol', 'i-vol')}</button>
+        <button class="film-btn" type="button" data-film-full ${attr('aria-label', ui.filmFull)}>${ico('full')}</button>
+      </div>
+    </div>
+    <div class="film-chapters"><h3 class="film-h">${t(ui.filmChapters)}</h3><ol>${chapters}</ol></div>
+  </div>
+</section>`;
 }
 
 function pioSection() {
@@ -255,6 +281,6 @@ export function home() {
     active: null,
     jsonld,
     cls: 'page-home',
-    body: [hero(), pioSection(), lensSection(), journeySection(), casesSection(), numbersSection(), industriesSection(), peopleSection(), voicesMapSection(), insightsSection(), faqSection(), ctaBand()].join('\n'),
+    body: [hero(), filmSection(), pioSection(), lensSection(), journeySection(), casesSection(), numbersSection(), industriesSection(), peopleSection(), voicesMapSection(), insightsSection(), faqSection(), ctaBand()].join('\n'),
   });
 }

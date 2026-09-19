@@ -42,6 +42,11 @@ const ICONS = {
   x: '<path d="M6 6l12 12M18 6L6 18"/>',
   globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
   up: '<path d="M12 19V5M6 11l6-6 6 6"/>',
+  play: '<path d="M8 5.5v13l11-6.5z" fill="currentColor"/>',
+  pause: '<path d="M8 5.5v13M16 5.5v13" stroke-width="3.2"/>',
+  vol: '<path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor" stroke="none"/><path d="M15.5 9a4.2 4.2 0 010 6M18 6.5a8 8 0 010 11"/>',
+  mute: '<path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5z" fill="currentColor" stroke="none"/><path d="M16 9.5l5 5M21 9.5l-5 5"/>',
+  full: '<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',
 };
 export const ico = (name, cls = '') => {
   if (!ICONS[name]) throw new Error('Unknown icon: ' + name);

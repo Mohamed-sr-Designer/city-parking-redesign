@@ -263,6 +263,60 @@
     form.addEventListener('input', function (e) { var w = e.target.closest('.field, .check'); if (w && w.classList.contains('is-invalid') && e.target.checkValidity()) w.classList.remove('is-invalid'); });
   });
 
+  /* ------------------------------------------------------------ film player */
+  $$('[data-film]').forEach(function (box) {
+    var v = $('video', box), playBtn = $('[data-film-play]', box), tog = $('[data-film-toggle]', box);
+    var prog = $('[data-film-progress]', box), fill = $('i', prog), tm = $('.film-time', box);
+    var mute = $('[data-film-mute]', box), full = $('[data-film-full]', box);
+    var chs = $$('[data-film-seek]', box.parentNode), userPaused = false;
+    function fmtT(x) { x = Math.floor(x || 0); return Math.floor(x / 60) + ':' + String(x % 60).padStart(2, '0'); }
+    function dur() { return v.duration && isFinite(v.duration) ? v.duration : 19; }
+    function play() { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+    function toggle() { if (v.paused) { userPaused = false; play(); } else { userPaused = true; v.pause(); } }
+    function sync() { box.classList.toggle('is-playing', !v.paused); box.classList.toggle('is-muted', v.muted); }
+    function seekTo(t) { try { v.currentTime = Math.max(0, Math.min(dur() - 0.05, t)); } catch (e) {} }
+    box.classList.add('is-muted');
+    v.addEventListener('play', sync); v.addEventListener('pause', sync); v.addEventListener('volumechange', sync);
+    v.addEventListener('timeupdate', function () {
+      var d = dur(), t = v.currentTime;
+      fill.style.width = (t / d * 100) + '%';
+      prog.setAttribute('aria-valuenow', String(Math.round(t)));
+      if (tm) tm.textContent = fmtT(t) + ' / ' + fmtT(d);
+      var on = 0; chs.forEach(function (c, i) { if (t >= parseFloat(c.getAttribute('data-film-seek')) - 0.05) on = i; });
+      chs.forEach(function (c, i) { c.classList.toggle('is-on', i === on); });
+    });
+    if (playBtn) playBtn.addEventListener('click', toggle);
+    if (tog) tog.addEventListener('click', toggle);
+    v.addEventListener('click', toggle);
+    if (prog) {
+      var seekFromEvent = function (e) {
+        var r = prog.getBoundingClientRect();
+        seekTo(Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * dur());
+      };
+      prog.addEventListener('click', seekFromEvent);
+      prog.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { e.preventDefault(); seekTo(v.currentTime + (e.key === 'ArrowRight' ? 2 : -2)); }
+      });
+    }
+    if (mute) mute.addEventListener('click', function () { v.muted = !v.muted; if (!v.muted && v.volume === 0) v.volume = 0.8; sync(); });
+    if (full) full.addEventListener('click', function () {
+      var el = box.requestFullscreen ? box : null;
+      if (el) el.requestFullscreen(); else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen(); else if (box.webkitRequestFullscreen) box.webkitRequestFullscreen();
+    });
+    chs.forEach(function (c) {
+      c.addEventListener('click', function () { userPaused = false; seekTo(parseFloat(c.getAttribute('data-film-seek'))); play(); });
+    });
+    /* muted autoplay while in view (never for reduced-motion), pause when it leaves */
+    if (!reduce && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) { if (!userPaused) play(); } else if (!v.paused) { v.pause(); }
+        });
+      }, { threshold: 0.45 }).observe(box);
+    }
+    sync();
+  });
+
   /* ------------------------------------------------------------ lightbox */
   var lb = null;
   function closeLb() { if (lb) { lb.remove(); lb = null; doc.body.style.overflow = ''; } }
