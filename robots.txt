@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mohamed-sr-designer.github.io/city-parking-redesign/sitemap.xml
