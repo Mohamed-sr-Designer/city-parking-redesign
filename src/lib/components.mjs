@@ -54,7 +54,7 @@ export function caseCard(c, size = 'm') {
   <div class="cc-body">
     <span class="plate">${t(kinds[c.kind])}</span>
     ${showHead ? `<h3>${t(c.headline)}</h3>` : `<h3>${t(c.name)}</h3>`}
-    <p class="cc-meta"><b>${t(c.name)}</b><i aria-hidden="true">·</i>${t(c.city)}<i aria-hidden="true">·</i>${t(c.date)}</p>
+    <p class="cc-meta"><b>${t(c.name)}</b><i aria-hidden="true">·</i>${t(c.city)}${c.date ? `<i aria-hidden="true">·</i>${t(c.date)}` : ''}</p>
     ${metric}
   </div>
   <span class="cc-go" aria-hidden="true">${arrow()}</span>
@@ -118,7 +118,7 @@ export function ticket(c) {
   <div class="ticket-top"><span class="ticket-tag">${t(ui.entryTicket)}</span><b>${t(c.name)}</b></div>
   <dl>
     ${row(ui.fLocation, c.city)}
-    ${row(ui.fDate, c.date)}
+    ${c.date ? row(ui.fDate, c.date) : ''}
     ${row(ui.fReq, c.facts.req)}
     ${row(ui.fSol, c.facts.sol)}
     ${row(ui.fSpec, c.facts.spec)}

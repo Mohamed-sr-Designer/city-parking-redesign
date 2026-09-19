@@ -216,7 +216,7 @@ export const cases = [
     name: b('North Square Mall', 'نورث سكوير مول'),
     kind: 'retail',
     city: b('Cairo, Egypt', 'القاهرة، مصر'),
-    date: b('Ongoing operation', 'تشغيل مستمر'),
+    date: null, // the source page shows Cairo Opera House data in its facts table — no reliable date
     year: 2024.0,
     img: 'north-square',
     gallery: ['north-square-crew-1', 'north-square-crew-2', 'north-square-crew-3'],

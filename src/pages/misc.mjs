@@ -74,7 +74,7 @@ ${phero({
     ${shead({ badge: b('Track record', 'سجل الإنجاز'), title: about.routeTitle, sub: about.routeSub, cls: 'shead--dark' })}
     <ol class="route-list">${route
       .map(
-        (c) => `<li><a href="${u('case-studies/' + c.slug + '/')}"><span class="route-pin"></span><span class="route-date">${t(c.date)}</span><b>${t(c.name)}</b><small>${t(c.city)}</small></a></li>`
+        (c) => `<li><a href="${u('case-studies/' + c.slug + '/')}"><span class="route-pin"></span><span class="route-date">${c.date ? t(c.date) : '&nbsp;'}</span><b>${t(c.name)}</b><small>${t(c.city)}</small></a></li>`
       )
       .join('')}</ol>
   </div>

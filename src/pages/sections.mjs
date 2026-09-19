@@ -305,7 +305,7 @@ ${ctaStrip()}`;
 export function casePage(c) {
   const idx = cases.indexOf(c);
   const next = cases[(idx + 1) % cases.length];
-  const meta = `<p class="phero-meta"><b>${t(c.name)}</b><i>·</i>${t(c.city)}<i>·</i>${t(c.date)}</p>${
+  const meta = `<p class="phero-meta"><b>${t(c.name)}</b><i>·</i>${t(c.city)}${c.date ? `<i>·</i>${t(c.date)}` : ''}</p>${
     c.metric ? `<div class="phero-metric">${led(c.metric.led, c.metric.suffix, 'led--md')}<p>${t(c.metric.label)}</p></div>` : ''
   }`;
   const body = `
